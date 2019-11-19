@@ -67,11 +67,20 @@ class Categoria extends Component {
     // GET - Listar
     // o map que está lá embaixo foi usado para listar o que foi chamado nessa requisição
     listaAtualizada = () => {
+
+        //habilita o ícone de carregando
+        this.setState({ loading: true });
+
+
         fetch("http://localhost:5000/api/categoria")
             .then(response => response.json())
-            .then(data => this.setState({ lista: data }
-            )
-            )
+            .then(data => this.setState({ lista: data }))
+
+        // desabilita o ícone após dois segundos
+        setTimeout(() => {
+            this.setState({ loading: false });
+
+        }, 2000);
     }
 
     // para o post, é preciso ter um formulario para usar a função onSubmit
@@ -80,6 +89,7 @@ class Categoria extends Component {
         // impedir que a página seja recarregada (impede refresh)
         event.preventDefault();
         console.log("Cadastrando");
+        // mostra o que está sendo cadastrado no console - orientação apenas - 
         console.log(this.state.nome);
 
         fetch("http://localhost:5000/api/categoria", {
@@ -103,6 +113,9 @@ class Categoria extends Component {
     deletarCategoria = (id) => {
         console.log("Excluindo")
 
+        // ao tentar deletar uma categoria, o estado é setado para false
+        this.setState({ erroMsg: "" })
+
         fetch("http://localhost:5000/api/categoria/" + id, {
             method: "DELETE",
             headers: {
@@ -116,10 +129,16 @@ class Categoria extends Component {
                 this.listaAtualizada()
                 this.setState(() => ({ lista: this.state.lista }))
             })
-            .catch(error => console.log(error)
-            )
+            .catch(error => {
+                console.log(error)
+
+            })
+        this.setState({
+            erroMsg: "Não é possível excluir essa categoria. Verifique se não há eventos que a utilizem."
+        })
     }
 
+    // PUT - ALTERAR
     alterarCategoria = (categoria) => {
         console.log(categoria)
 
@@ -127,7 +146,12 @@ class Categoria extends Component {
             editarModal: {
                 categoriaId: categoria.categoriaId,
                 titulo: categoria.titulo
-            }
+            },
+            // state do loading
+            loading: false,
+
+            // mensagem de erro para o usuário que tentar deletar uma categoria que já tem evento
+            erroMsg: ""
         })
         // abre modal
         this.toggle()
@@ -149,7 +173,7 @@ class Categoria extends Component {
             })
             .catch(error => console.log(error)
             )
-        
+
         // ficou fora da requisição para atualizar assim que fechar o modal
         setTimeout(() => {
             // console.log(response)
@@ -163,6 +187,12 @@ class Categoria extends Component {
 
     atualizaNome(input) {
         this.setState({ nome: input.target.value })
+    }
+
+    // de ótimo uso nos vários inputs existentes no form
+    // adicionar a chamada de classe no input
+    atualizaEstado(event){
+        this.setState({[event.target.name] : event.target.value})
     }
 
     atualizaEditarModalTitulo(input) {
@@ -215,6 +245,14 @@ class Categoria extends Component {
                                     }
                                 </tbody>
                             </table>
+                            <br></br>
+
+                            {/* se houver uma mens de erro/ se houver carregamento */}
+                            {this.state.erroMsg && <div className="text-danger">{this.state.erroMsg}</div>}
+
+                            {/* verifica se load for true, ele adiciona o icone rodando */}
+                            {/* fa-spin faz ele girar, fa-4x modifica o tamanho e blue-text deixa ele azul */}
+                            {this.state.loading && <i className="fas fa-spinner fa-spin fa-2x blue-text"></i>}
                         </div>
 
                         <div className="container" id="conteudoPrincipal-cadastro">
