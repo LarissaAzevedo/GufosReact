@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-//importando o componente do footer
+import Header from '../../components/Header/header';
 import Footer from '../../components/Footer/footer';
 // import { Link } from 'react-router-dom';
 // import dos componentes da biblioteca Material Design Bootstrap React 
@@ -17,6 +17,11 @@ class Categoria extends Component {
             lista: [],
             // parâmetro do objeto que sofrerá alterações no método post
             nome: "",
+            // state do loading
+            loading: false,
+
+            // mensagem de erro para o usuário que tentar deletar uma categoria que já tem evento
+            erroMsg: "",
             modal: false,
             editarModal: {
                 categoriaId: "",
@@ -131,11 +136,11 @@ class Categoria extends Component {
             })
             .catch(error => {
                 console.log(error)
+                this.setState({
+                    erroMsg: "Não é possível excluir essa categoria. Verifique se não há eventos que a utilizem."
+                })
 
             })
-        this.setState({
-            erroMsg: "Não é possível excluir essa categoria. Verifique se não há eventos que a utilizem."
-        })
     }
 
     // PUT - ALTERAR
@@ -147,11 +152,6 @@ class Categoria extends Component {
                 categoriaId: categoria.categoriaId,
                 titulo: categoria.titulo
             },
-            // state do loading
-            loading: false,
-
-            // mensagem de erro para o usuário que tentar deletar uma categoria que já tem evento
-            erroMsg: ""
         })
         // abre modal
         this.toggle()
@@ -191,8 +191,8 @@ class Categoria extends Component {
 
     // de ótimo uso nos vários inputs existentes no form
     // adicionar a chamada de classe no input
-    atualizaEstado(event){
-        this.setState({[event.target.name] : event.target.value})
+    atualizaEstado(event) {
+        this.setState({ [event.target.name]: event.target.value })
     }
 
     atualizaEditarModalTitulo(input) {
@@ -210,6 +210,7 @@ class Categoria extends Component {
         return (
             <div>
                 {/* <Link to='/'>Voltar</Link> */}
+                <Header />
                 <main className="conteudoPrincipal">
                     <section className="conteudoPrincipal-cadastro">
                         <h1 className="conteudoPrincipal-cadastro-titulo">Categorias</h1>

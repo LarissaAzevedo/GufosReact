@@ -2,10 +2,12 @@ import React from 'react';
   // import './App.css';
 //importando o componente do footer
 import Footer from '../../components/Footer/footer';
+import Header from '../../components/Header/header';
 
 function App() {
   return (
     <div className="App">
+      <Header />
      
      <section className="conteudoImagem">
         <div>
