@@ -8,6 +8,7 @@ import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalF
 class Categoria extends Component {
 
     // obrigatório, pois ele que cria os states
+    
     constructor() {
         // super é usado para manipular os states, herdados de Component - não é possível usar setState sem ele
         // aqui ficam todos os objetos que sofrerão modificação
@@ -55,7 +56,7 @@ class Categoria extends Component {
         // é chamado após o carregamento do DOM
         // quando a página é carregada, exibe os dados do banco, a lista é chamada e aparece
         console.log("Carregado")
-        console.log(this.state.lista)
+        // console.log(this.state.lista)
         this.listaAtualizada()
     }
 
@@ -72,10 +73,8 @@ class Categoria extends Component {
     // GET - Listar
     // o map que está lá embaixo foi usado para listar o que foi chamado nessa requisição
     listaAtualizada = () => {
-
         //habilita o ícone de carregando
         this.setState({ loading: true });
-
 
         fetch("http://localhost:5000/api/categoria")
             .then(response => response.json())
@@ -109,7 +108,7 @@ class Categoria extends Component {
                 console.log(response)
                 this.listaAtualizada()
                 // o id não foi adicionado por ser auto-incremento, não será adicionado nem cadastrado
-                this.setState(() => ({ lista: this.state.lista }))
+                // this.setState(() => ({ lista: this.state.lista }))
             })
             .catch(error => console.log(error)
             )
@@ -151,11 +150,10 @@ class Categoria extends Component {
             editarModal: {
                 categoriaId: categoria.categoriaId,
                 titulo: categoria.titulo
-            },
+            }
         })
         // abre modal
         this.toggle()
-
     }
 
     salvarAlteracoes = (event) => {
@@ -184,7 +182,6 @@ class Categoria extends Component {
     }
 
     //altera o input de cadastrado
-
     atualizaNome(input) {
         this.setState({ nome: input.target.value })
     }

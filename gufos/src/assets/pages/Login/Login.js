@@ -9,7 +9,6 @@ import { parseJWT } from '../../services/auth'
 import api from '../../services/api'
 
 class Login extends Component {
-
     constructor() {
         super()
 
@@ -18,8 +17,10 @@ class Login extends Component {
             email: "",
             senha: "",
             erroMensagem: "",
-            isLoading: false
+            // flag verificando o andamento da requisição
+            isLoading: false 
         }
+        this.props = {}
     }
 
     // value: valor inserido no input
@@ -28,18 +29,17 @@ class Login extends Component {
     // no caso, o value é atributo do input 
     atualizaEstado = (event) => {
         this.setState({ [event.target.name]: event.target.value });
-
     }
 
     realizaLogin = (event) => {
         event.preventDefault()
 
-        this.setState({ erroMensagem: '' })
-
+        this.setState({ erroMensagem: "" })
         // define que uma requisição está em andamento
         this.setState({ isLoading: true })
         // obj config encurta todo aquele trabalho de criar as configurações com fetch
 
+        // comentamos para ver o axios funcionando
         // let config = {
         //     headers: {
         //         "Content-Type": "application/json",
@@ -62,8 +62,8 @@ class Login extends Component {
         api.post("/login", {
             email: this.state.email,
             senha: this.state.senha
-        }
-        )
+        })
+        
             // json fal automaticamente a conversão para json
             .then(response => {
                 // console.log("Retorno do login: ", Response)
